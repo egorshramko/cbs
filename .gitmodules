@@ -1,0 +1,3 @@
+[submodule "cbs-frontend"]
+	path = cbs-frontend
+	url = https://github.com/egorshramko/cbs-frontend.git
