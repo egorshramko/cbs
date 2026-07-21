@@ -1,0 +1,10 @@
+# Название проекта
+name: cbs
+
+# Сервисы
+services:
+  frontend:   
+    build: ./cbs-frontend
+    container_name: cbs-frontend
+    ports:
+      - "3000:3000"
