@@ -17,7 +17,7 @@ pipeline {
                 sh '''
                     docker build \
                     -t registry.local.home:5000/cbs-frontend:develop \
-                    cbs-frontend
+                    ./cbs-frontend
                 '''
             }
         }
