@@ -16,7 +16,7 @@ pipeline {
             steps {
                 script {
                     env.IMAGE_TAG = sh(
-                        script: "git rev-parse --short HEAD"
+                        script: "git rev-parse --short HEAD",
                         returnStdout: true
                     ).trim()
                 }
