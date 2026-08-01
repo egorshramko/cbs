@@ -13,6 +13,7 @@ pipeline {
         }
         stage('Build frontend') {
             steps {
+                sh 'pwd'
                 sh '''
                     docker build \
                     -t registry.local.home:5000/cbs-frontend:develop \
