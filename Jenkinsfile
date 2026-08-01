@@ -15,7 +15,7 @@ pipeline {
             steps {
                 sh '''
                     docker build \
-                    -t registry.local.home/cbs-frontend:develop \
+                    -t registry.local.home:5000/cbs-frontend:develop \
                     cbs-frontend
                 '''
             }
