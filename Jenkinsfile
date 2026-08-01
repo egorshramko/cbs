@@ -61,6 +61,20 @@ pipeline {
             }
         }
 
+        stage('Copy env to DEV') {
+            steps {
+                sh '''
+                echo "IMAGE_TAG=${IMAGE_TAG}" > .env.dev
+                '''
+                sshagent(['dev-ssh-key']) {
+                    sh '''
+                    scp .env.dev \
+                    root@dev.local.home:/opt/cbs/.env
+                    '''
+                }
+            }
+        }
+
         stage('Deploy DEV') {
             steps {
                 sshagent(['dev-ssh-key']) {
