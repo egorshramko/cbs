@@ -2,7 +2,6 @@ pipeline {
     agent any
     environment {
         REGISTRY = "registry.local.home:5000"
-        IMAGE_TAG = "${GIT_REVISION}"
     }
     stages {
 
@@ -12,17 +11,17 @@ pipeline {
             }
         }
 
-        // stage('Prepare Version') {
-        //     steps {
-        //         script {
-        //             env.IMAGE_TAG = sh(
-        //                 script: "printf \$(git rev-parse --short ${GIT_COMMIT})",
-        //                 returnStdout: true
-        //             ).trim()
-        //         }
-        //         echo "Build version: ${IMAGE_TAG}"
-        //     }
-        // }
+        stage('Prepare Version') {
+            steps {
+                script {
+                    env.IMAGE_TAG = sh(
+                        script: "git rev-parse --short HEAD",
+                        returnStdout: true
+                    ).trim()
+                }
+                echo "Build version: ${IMAGE_TAG}"
+            }
+        }
 
         stage('Start') {
             steps {
