@@ -1,0 +1,7 @@
+# Название проекта
+name: cbs
+
+services:
+  frontend:
+    image: registry.local.home/cbs-frontend:develop
+    
