@@ -2,7 +2,7 @@ pipeline {
     agent any
     environment {
         REGISTRY = "registry.local.home:5000"
-        IMAGE_TAG = "${GIT_REVISION:0:7}"
+        IMAGE_TAG = "${GIT_REVISION}"
     }
     stages {
 
