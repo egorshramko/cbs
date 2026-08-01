@@ -6,9 +6,18 @@ pipeline {
                 checkout scm
             }
         }
-        stage ('Start') {
+        stage('Start') {
             steps {
                 echo 'Jenkins pipeline started'
+            }
+        }
+        stage('Build frontend') {
+            steps {
+                sh '''
+                    docker build \
+                    -t registry.local.home/cbs-frontend:develop \
+                    cbs-frontend
+                '''
             }
         }
     }
