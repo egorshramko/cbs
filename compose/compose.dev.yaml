@@ -5,4 +5,5 @@ services:
   frontend:
     image: registry.local.home:5000/cbs-frontend:${IMAGE_TAG}
     restart: always
-    ports: "3000:3000"
+    ports:
+      - "3000:3000"
