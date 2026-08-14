@@ -1,0 +1,40 @@
+# Docker Compose для локальной разработки
+
+# Название проекта
+name: cbs
+
+services:
+  frontend:
+    container_name: cbs-frontend
+    build: ../cbs-frontend
+    ports:
+      - "3000:3000"
+
+  backend:
+    container_name: cbs-backend
+    build: ../cbs-backend
+    ports: 
+      - "8080:8080"
+
+  db:
+    container_name: cbs-db
+    image: postgres:17-alpine3.22
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "${POSTGRES_PORT}:5432" # порт задан через переменную, потому что мне нужен не дефолтный порт, задайте свой в .env
+    volumes:
+      - cbs-db-volume:/var/lib/postgresql/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready", "-d", "${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+      start_period: 30s
+
+volumes:
+  cbs-db-volume:
+
