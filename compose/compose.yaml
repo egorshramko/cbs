@@ -35,6 +35,22 @@ services:
       retries: 3
       start_period: 30s
 
+  s3:
+    container_name: cbs-minio
+    image: minio/minio
+    environment:  
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - cbs-minio-volume:/data
+    command: server /data --console-address ":9001"
+
+
 volumes:
   cbs-db-volume:
+  cbs-minio-volume:
+
 
