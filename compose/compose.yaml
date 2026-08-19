@@ -15,6 +15,15 @@ services:
     build: ../cbs-backend
     ports: 
       - "8080:8080"
+    environment: 
+      SPRING_PROFILES_ACTIVE: local
+      CBS_POSTGRES_URL: jdbc:postgresql://db:5432/${POSTGRES_DB}
+      CBS_POSTGRES_USER: ${POSTGRES_USER}
+      CBS_POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+    
+
 
   db:
     container_name: cbs-db
