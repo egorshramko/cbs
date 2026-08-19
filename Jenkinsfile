@@ -83,7 +83,8 @@ pipeline {
             steps {
                 withCredentials([file(credentialsId: 'dev-env-file', variable: 'ENV_FILE')]) {
                     sh '''
-                        echo "IMAGE_TAG=${IMAGE_TAG}" >> $ENV_FILE
+                        cp $ENV_FILE .env.dev
+                        echo "IMAGE_TAG=${IMAGE_TAG}" >> .env.dev
                     '''
                     sshagent(['dev-ssh-key']) {
                         sh '''
