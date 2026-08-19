@@ -10,7 +10,7 @@ services:
     restart: unless-stopped
     ports:
       - "3000:3000"
-    args:
+    environment:
       NEXT_PUBLIC_API_URL: http://dev.local.home:8080
 
   backend:
