@@ -40,11 +40,30 @@ pipeline {
             }
         }
 
+        stage('Build backend') {
+            steps {
+                sh '''
+                    docker build \ 
+                    -t ${REGISTRY}/cbs-backend:${IMAGE_TAG} \
+                    cbs-backend
+                '''
+            }
+        }
+
         stage('Push frontend') {
             steps {
                 sh '''
                     docker push \
                     ${REGISTRY}/cbs-frontend:${IMAGE_TAG}
+                '''
+            }
+        }
+
+        stage('Push backend') {
+            steps {
+                sh '''
+                    docker push \ 
+                    ${REGISTRY}/cbs-backend:${IMAGE_TAG}
                 '''
             }
         }
@@ -62,15 +81,18 @@ pipeline {
 
         stage('Copy env to DEV') {
             steps {
-                sh '''
-                echo "IMAGE_TAG=${IMAGE_TAG}" > .env.dev
-                '''
-                sshagent(['dev-ssh-key']) {
+                withCredentials([file(credentialsId: 'dev-env-file', variable: 'ENV_FILE')]) {
                     sh '''
-                    scp .env.dev \
-                    root@dev.local.home:/opt/cbs/.env
+                        echo "IMAGE_TAG=${IMAGE_TAG}" >> $ENV_FILE
                     '''
+                    sshagent(['dev-ssh-key']) {
+                        sh '''
+                        scp $ENV_FILE \
+                        root@dev.local.home:/opt/cbs/.env
+                        '''
+                    }
                 }
+                
             }
         }
 
