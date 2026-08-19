@@ -86,7 +86,7 @@ pipeline {
                         cp $ENV_FILE .env.dev
                     '''
                     sh '''
-                        echo "IMAGE_TAG=${IMAGE_TAG}" >> .env.dev
+                        echo "\nIMAGE_TAG=${IMAGE_TAG}" >> .env.dev
                     '''
                     sshagent(['dev-ssh-key']) {
                         sh '''
