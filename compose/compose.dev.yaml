@@ -7,6 +7,57 @@ services:
   frontend:
     container_name: cbs-frontend
     image: registry.local.home:5000/cbs-frontend:${IMAGE_TAG}
-    restart: always
+    restart: unless-stopped
     ports:
       - "3000:3000"
+
+  backend:
+    container_name: cbs-backend
+    image: registry.local.home:5000/cbs-backend:${IMAGE_TAG}
+    ports: 
+      - "8080:8080"
+    restart: unless-stopped
+    environment: 
+      SPRING_PROFILES_ACTIVE: dev
+      CBS_POSTGRES_URL: jdbc:postgresql://db:5432/${POSTGRES_DB}
+      CBS_POSTGRES_USER: ${POSTGRES_USER}
+      CBS_POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+
+  db:
+    container_name: cbs-db
+    image: postgres:17-alpine3.22
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - cbs-db-volume:/var/lib/postgresql/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready", "-d", "${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+      start_period: 30s
+
+  s3:
+    container_name: cbs-minio
+    image: minio/minio
+    environment:  
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - cbs-minio-volume:/data
+    command: server /data --console-address ":9001"
+
+
+volumes:
+  cbs-db-volume:
+  cbs-minio-volume:
