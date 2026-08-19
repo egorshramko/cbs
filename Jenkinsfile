@@ -84,11 +84,13 @@ pipeline {
                 withCredentials([file(credentialsId: 'dev-env-file', variable: 'ENV_FILE')]) {
                     sh '''
                         cp $ENV_FILE .env.dev
+                    '''
+                    sh '''
                         echo "IMAGE_TAG=${IMAGE_TAG}" >> .env.dev
                     '''
                     sshagent(['dev-ssh-key']) {
                         sh '''
-                        scp $ENV_FILE \
+                        scp .env.dev \
                         root@dev.local.home:/opt/cbs/.env
                         '''
                     }
