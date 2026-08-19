@@ -43,7 +43,7 @@ pipeline {
         stage('Build backend') {
             steps {
                 sh '''
-                    docker build \ 
+                    docker build \
                     -t ${REGISTRY}/cbs-backend:${IMAGE_TAG} \
                     cbs-backend
                 '''
@@ -62,7 +62,7 @@ pipeline {
         stage('Push backend') {
             steps {
                 sh '''
-                    docker push \ 
+                    docker push \
                     ${REGISTRY}/cbs-backend:${IMAGE_TAG}
                 '''
             }
