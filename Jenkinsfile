@@ -35,6 +35,7 @@ pipeline {
                 sh '''
                     docker build \
                     -t ${REGISTRY}/cbs-frontend:${IMAGE_TAG} \
+                    --build-arg NEXT_PUBLIC_API_URL=http://dev.local.home:8080 \
                     cbs-frontend
                 '''
             }
