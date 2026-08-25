@@ -15,6 +15,7 @@ services:
     build: ../cbs-backend
     ports: 
       - "8080:8080"
+    restart: unless-stopped
     environment: 
       SPRING_PROFILES_ACTIVE: local
       CBS_POSTGRES_URL: jdbc:postgresql://db:5432/${POSTGRES_DB}
