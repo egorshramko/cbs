@@ -1,4 +1,6 @@
-scripts
+scripts/*.ps1
+scripts/*.bat
+scripts/generate-sessions.py
 
 .env*
 
