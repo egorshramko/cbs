@@ -35,6 +35,8 @@ def duration_to_minutes(duration_nanosec):
 # Функция проверки сгенерированной даты сеанса
 def check_sessiondate(hall_id, movie_duration_minutes, ses_datetime):
 
+    print("Запущена проверка сгенерированной даты сеанса", end="\n")
+
     # Получение длительности фильма и даты ближайшего сеанса в зале до проверяемой даты
     cursor.execute("SELECT m.duration, s.session_datetime " \
     "FROM hall AS h INNER JOIN session_ AS s ON h.id = s.hall " \
@@ -45,12 +47,16 @@ def check_sessiondate(hall_id, movie_duration_minutes, ses_datetime):
     # Ближайший сеанс в зале из БД до проверяемой даты
     closer_before_session = cursor.fetchone()
 
+    print(f"closer_before_session={closer_before_session}", end="\n")
+
     # Левая часть проверки (начало нового сеанса должно быть после завершения предыдущего)
     left_check = True
     if closer_before_session is not None:
-        closer_before_session_duration = closer_before_session[0][0]
-        closer_before_session_datetime = datetime.datetime(closer_before_session[0][1])
-        closer_before_session_end_datetime = datetime.datetime(closer_before_session_datetime) + \
+        closer_before_session_duration = closer_before_session[0]
+        print(f"closer_before_session_duration={closer_before_session_duration}", end="\n")
+        closer_before_session_datetime = closer_before_session[1]
+        print(f"closer_before_session_datetime={closer_before_session_datetime}", end="\n")
+        closer_before_session_end_datetime = closer_before_session_datetime + \
             datetime.timedelta(minutes=duration_to_minutes(closer_before_session_duration))
         left_check = ses_datetime > closer_before_session_end_datetime
         
@@ -65,10 +71,12 @@ def check_sessiondate(hall_id, movie_duration_minutes, ses_datetime):
 
     closer_after_session = cursor.fetchone()
 
+    print(f"closer_after_session={closer_after_session}", end="\n")
+
     # Правая часть проверки (конец нового сеанса должен быть до начала следующего сеанса)
     right_check = True
     if closer_after_session is not None:
-        closer_after_session_datetime = datetime.datetime(closer_after_session[0][0])
+        closer_after_session_datetime = closer_after_session[0]
         right_check = ses_end_datetime < closer_after_session_datetime
 
     return left_check and right_check
