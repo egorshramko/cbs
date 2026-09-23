@@ -9,14 +9,13 @@ services:
     build: ../cbs-frontend
     ports:
       - "3000:3000"
-    args:
-      NEXT_PUBLIC_API_URL: http://localhost:8080
 
   backend:
     container_name: cbs-backend
     build: ../cbs-backend
     ports: 
-      - "8080:8080"
+      - "8080:8081"
+    restart: unless-stopped
     environment: 
       SPRING_PROFILES_ACTIVE: local
       CBS_POSTGRES_URL: jdbc:postgresql://db:5432/${POSTGRES_DB}
