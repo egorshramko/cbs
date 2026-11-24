@@ -1,6 +1,7 @@
 scripts/*.ps1
 scripts/*.bat
 scripts/generate-sessions.py
+scripts/bezier.py
 
 .env*
 
